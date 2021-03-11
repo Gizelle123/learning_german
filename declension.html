@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>German declension</title>
+<style>
+table, th, td { border: 1px solid black; }
+.emph { color: white; background-color: blue; font-weight: bold; }
+</style>
+<script>
+var article = {
+    "nominative": {
+        "masculine": "der",
+        "feminine": "die",
+        "neuter": "das",
+    },
+    "accusative": {
+        "masculine": "den",
+        "feminine": "die",
+        "neuter": "das",
+    },
+    "dative": {
+        "masculine": "dem",
+        "feminine": "der",
+        "neuter": "dem",
+    },
+    "genitive": {
+        "masculine": "des",
+        "feminine": "der",
+        "neuter": "des",
+    },
+};
+var questions = {
+    "nominative": "Wer?",
+    "accusative": "Was?",
+    "dative": "Wem?",
+    "genitive": "Wessen?",
+};
+var examples = {
+    "nominative": {
+        "masculine": "Der Sohn",
+        "feminine": "Die Tochter",
+        "neuter": "Das Kind",
+    },
+    "accusative": {
+        "masculine": "den Apfel",
+        "feminine": "die Birne",
+        "neuter": "das Obst",
+    },
+    "dative": {
+        "masculine": "dem Hund",
+        "feminine": "der Kuh",
+        "neuter": "dem Pferd",
+    },
+    "genitive": {
+        "masculine": "des Mannes",
+        "feminine": "der Frau",
+        "neuter": "des Lebewesens",
+    },
+};
+var cases = [];
+var genders = [];
+for (case_ in article) {
+    cases.push(case_);
+}
+for (gender in article[cases[0]]) {
+    genders.push(gender);
+}
+
+function setup() {
+    body = document.getElementsByTagName("body")[0];
+    this_case = random(cases);
+    this_gender = random(genders);
+    html = this_case + " " + this_gender;
+    html += "<br><button onclick=\"print_table('" + this_case + "', '" + this_gender + "')\">show solution</button>";
+    body.innerHTML = html;
+}
+
+function random(items) {
+    return items[Math.floor(Math.random() * items.length)];
+}
+
+function print_table(this_case, this_gender) {
+    html = "<table>";
+    html += "<tr>";
+    html += "<td></td>";
+    for (gender in genders) {
+        html += "<td>" + genders[gender] + "</td>";
+    }
+    html += "</tr>";
+    for (case_ in article) {
+        html += "<tr>";
+        html += "<td>" + case_ + "</td>";
+        for (gender in article[case_]) {
+            html += "<td><span" + (case_ == this_case && gender == this_gender ? ' class="emph"' : "") + ">" + article[case_][gender] + "<span></td>";
+        }
+        html += "</tr>";
+    }
+    html += "</table>";
+    html += questions[this_case] + " ";
+    sentence = ["nominative", "genitive", "accusative", "dative"];
+    for (case_ in sentence) {
+        if (sentence[case_] == this_case) {
+            html += '<span class="emph">' + examples[this_case][this_gender] + "</span>";
+        }
+        else {
+            html += examples[sentence[case_]][random(genders)];
+        }
+        if (case_ == cases.length - 1) {
+            html += ".";
+        }
+        else {
+            html += " ";
+        }
+        if (sentence[case_] == "genitive") {
+            html += "gibt ";
+        }
+    }
+    html += "<br><button onclick=\"setup()\">next</button>";
+    body.innerHTML = html;
+}
+window.onload = setup;
+</script>
+</head>
+<body>
+
+https://en.wikipedia.org/wiki/German_declension
+Maskulinum (männliches Geschlecht), Femininum (weibliches Geschlecht), Neutrum
+Masculine Feminine Neuter
+Nominative der die das
+Accusative den die das
+Dative dem der dem
+Genitive des der des
+</body>
+
+</html>
